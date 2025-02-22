@@ -1,0 +1,44 @@
+c001 Opening a door
+c002 Sitting on a chair
+c003 Pulling out a gun
+c004 Walking while holding/pointing a gun
+c005 Walking around looking at surroundings
+c006 Stealing a TV
+c007 Stealing a laptop
+c008 Opening a closet/cabinet
+c009 Opening a drawer
+c010 Negotiating with people
+c011 Inspecting other people's belongings
+c012 Rummaging through drawers/cabinets
+c013 Forcing a hostage to lie on the ground
+c014 Getting into a car
+c015 Walking up the stairs
+c016 Carrying a chair
+c017 Searching and taking valuables
+c018 Backing up a car
+c019 Getting out of a car
+c020 Breaking open a door/gate
+c021 Moving through a hallway
+c022 Breaking open a door with an object
+c023 Opening a vehicle trunk
+c024 Loading an object on a vehicle
+c025 Driving away
+c026 Breaking into a vehicle
+c027 Trying to break open a door/gate
+c028 Walking up to a house
+c029 Ringing a doorbell
+c030 Trying to break into a house
+c031 Prying open a window
+c032 Climbing through a window
+c033 Firing a gun
+c034 Fleeing from a house
+c035 Delivering a parcel
+c036 Stealing a parcel
+c037 Putting down a parcel
+c038 Stealing a bicycle
+c039 Stealing a package
+c040 Riding a bicycle
+c041 Stealing a motorcycle
+c042 Carrying a safe
+c043 Breaking into a house
+c044 Fleeing the scene
