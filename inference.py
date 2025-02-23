@@ -14,7 +14,7 @@ def infer_action_segments(video_path, action_code, model_path='temporal_model.pt
 
     # Extract features from the video
     output_feature_path = 'data/custom_dataset/video_features/temp_video.npy'
-    features = extract_video_features(video_path, output_feature_path, max_length=max_length, video_dim=video_dim)
+    features, duration, num_frames_extracted = extract_video_features(video_path, output_feature_path, max_length=max_length, video_dim=video_dim)
     if features is None:
         print("Feature extraction failed. Exiting.")
         return []
@@ -32,6 +32,10 @@ def infer_action_segments(video_path, action_code, model_path='temporal_model.pt
         proposals = proposals.squeeze(0)  # Shape: (max_proposals, 3)
         class_probs = class_probs.squeeze(0)  # Shape: (max_proposals, num_classes)
 
+        # Scale factor: map feature space (0 to max_length) to real time (0 to duration)
+        scale_factor = duration / max_length
+        print(f"Video Duration: {duration:.2f}s, Scale Factor: {scale_factor:.4f}")
+
         # Find segments for the specified action
         segments = []
         for i in range(max_proposals):
@@ -39,7 +43,13 @@ def infer_action_segments(video_path, action_code, model_path='temporal_model.pt
             confidence = class_probs[i, pred_class].item()
             if pred_class == action_idx and confidence > 0.5:  # Confidence threshold
                 start, end = proposals[i, :2].tolist()
-                segments.append((start, end))
+                # Scale to real video time
+                start_scaled = start * scale_factor
+                end_scaled = end * scale_factor
+                # Clamp to video duration
+                start_scaled = min(start_scaled, duration)
+                end_scaled = min(end_scaled, duration)
+                segments.append((start_scaled, end_scaled))
 
     return segments
 
