@@ -18,12 +18,12 @@ model = dict(
 data = dict(
     train=dict(
         label_path='data/custom_dataset/train_annotations.jsonl',
-        video_path='data/custom_dataset/video_features',
+        video_path='data/custom_dataset/video_features_SigLIP',
         audio_path='data/custom_dataset/audio_features'
     ),
     val=dict(
         label_path='data/custom_dataset/val_annotations.jsonl',
-        video_path='data/custom_dataset/video_features',
+        video_path='data/custom_dataset/video_features_SigLIP',
         audio_path='data/custom_dataset/audio_features'
     )
 )

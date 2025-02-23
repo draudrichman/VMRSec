@@ -39,8 +39,8 @@ def train(model, dataloader, criterion_cls, criterion_reg, optimizer, device):
     return running_loss / len(dataloader)
 
 def main():
-    video_dim = 512
-    hidden_dim = 512
+    video_dim = 768
+    hidden_dim = 768
     num_classes = 44
     batch_size = 8
     num_epochs = 10
@@ -52,7 +52,7 @@ def main():
     action_mappings = load_action_mappings('data/custom_dataset/actions.txt')
     train_dataset = CustomDataset(
         label_path='data/custom_dataset/train_annotations.jsonl',
-        video_path='data/custom_dataset/video_features',
+        video_path='data/custom_dataset/video_features_SigLIP',
         action_mappings=action_mappings,
         num_classes=num_classes,
         max_length=max_length,
