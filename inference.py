@@ -54,7 +54,7 @@ def infer_action_segments(video_path, action_code, model_path='temporal_model.pt
     return segments
 
 def main():
-    video_path = "V019.mp4"  # Replace with your video path
+    video_path = "path_to_your_video.mp4"  # Replace with your video path
     action_code = "c036"  # Example: Stealing a parcel
     segments = infer_action_segments(video_path, action_code)
     

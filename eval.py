@@ -18,18 +18,21 @@ def evaluate(model, dataloader, device, iou_threshold=0.1):
         for batch in dataloader:
             video = batch['video'].to(device)  # Shape: (batch_size, max_length, video_dim)
             actions = batch['actions'].to(device)  # Shape: (batch_size, max_proposals, 3)
+            durations = torch.tensor(batch['duration'], device=device)  # Shape: (batch_size,)
 
             proposals, class_probs = model(video)  # (batch_size, max_proposals, 3), (batch_size, max_proposals, num_classes)
             batch_size = video.size(0)
+            max_length = video.size(1)  # 300
+            scale_factors = durations / max_length  # Scale feature space to seconds
 
             for i in range(batch_size):
                 pred_segments = []
                 for j in range(proposals.size(1)):
                     pred_class = torch.argmax(class_probs[i, j]).item()
-                    pred_start, pred_end = proposals[i, j, :2].tolist()
+                    pred_start, pred_end = proposals[i, j, :2] * scale_factors[i]  # Scale to seconds
                     confidence = class_probs[i, j, pred_class].item()
                     if confidence > 0.1:
-                        pred_segments.append({'class': pred_class, 'start': pred_start, 'end': pred_end})
+                        pred_segments.append({'class': pred_class, 'start': pred_start.item(), 'end': pred_end.item()})
 
                 gt_segments = []
                 for action in actions[i]:
@@ -65,6 +68,7 @@ def main():
     num_classes = 44
     batch_size = 8
     max_proposals = 10
+    max_length = 300
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     action_mappings = load_action_mappings('data/custom_dataset/actions.txt')
@@ -73,7 +77,7 @@ def main():
         video_path='data/custom_dataset/video_features',
         action_mappings=action_mappings,
         num_classes=num_classes,
-        max_length=300,
+        max_length=max_length,
         max_proposals=max_proposals
     )
     val_dataloader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)

@@ -41,25 +41,26 @@ class CustomDataset(Dataset):
         action_data = []
         for action in actions_str.split(';'):
             parts = action.split()
-            action_code = parts[0]  # e.g., "c015"
-            start, end = float(parts[1]), float(parts[2])  # e.g., 0.14, 5.96
-            action_idx = int(action_code[1:]) - 1  # Zero-based index (e.g., 14)
+            action_code = parts[0]
+            start, end = float(parts[1]), float(parts[2])
+            action_idx = int(action_code[1:]) - 1  # Zero-based index
             action_data.append([action_idx, start, end])
 
         # Pad action_data to max_proposals
         num_actions = len(action_data)
         if num_actions < self.max_proposals:
-            padding = [[-1, 0.0, 0.0]] * (self.max_proposals - num_actions)  # -1 indicates no action
+            padding = [[-1, 0.0, 0.0]] * (self.max_proposals - num_actions)
             action_data.extend(padding)
         elif num_actions > self.max_proposals:
-            action_data = action_data[:self.max_proposals]  # Truncate if too many actions
+            action_data = action_data[:self.max_proposals]
 
         # Convert to tensors
         video = torch.from_numpy(video).float()  # Shape: (max_length, video_dim)
         actions_tensor = torch.tensor(action_data, dtype=torch.float)  # Shape: (max_proposals, 3)
 
         return {
-            'video': video,  # Shape: (max_length, video_dim)
-            'actions': actions_tensor,  # Shape: (max_proposals, 3) - [class_idx, start, end]
-            'description': self.label[idx]['description']
+            'video': video,
+            'actions': actions_tensor,
+            'description': self.label[idx]['description'],
+            'duration': float(self.label[idx]['duration'])  # Convert duration to float
         }
